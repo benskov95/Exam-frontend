@@ -80,7 +80,7 @@ export default function Header({ isLoggedIn, setLoginStatus, loginMsg }) {
         </Route>
 
         <Route path="/sports">
-          <Sports />
+          <Sports roles={roles}/>
         </Route>
 
         <PrivateRoute path="/example" isLoggedIn={isLoggedIn} component={Example} />
