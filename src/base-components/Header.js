@@ -52,7 +52,7 @@ export default function Header({ isLoggedIn, setLoginStatus, loginMsg }) {
             </li>
           </React.Fragment>
           )}
-          {isLoggedIn && (
+          {roles.includes("user") && (
             <React.Fragment>
             <li>
               <NavLink activeClassName="active" to="/my-teams">

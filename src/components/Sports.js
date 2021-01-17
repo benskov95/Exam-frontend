@@ -42,12 +42,6 @@ export default function Sports({roles}) {
 
     return (
     <div>
-        {allSports.length === 0 ? (
-            <div>
-                <br /><br />
-                <h1>Loading...</h1>
-            </div>
-        ) : (
         <div className="container" style={{backgroundColor: "white"}}>
             <br />
             <h1>Sports</h1>
@@ -79,7 +73,6 @@ export default function Sports({roles}) {
                 </tbody>
             </table>
         </div>
-        )}
 
         <Modal show={isOpen} onHide={toggleModal}>
         <Modal.Header closeButton>
