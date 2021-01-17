@@ -6,14 +6,14 @@ export default function SportTeams({roles}) {
     const [allSportTeams, setAllSportTeams] = useState([]);
     const [allSports, setAllSports] = useState([]);
     const [isOpen, setIsOpen] = useState(false);
+    const [isEdit, setIsEdit] = useState(false);
     const [msg, setMsg] = useState("");
     const [error, setError] = useState("");
-    const [sportTeam, setSportTeam] = 
-    useState(
-        {sportId: 0, teamName: "", description: "", 
-        pricePerYear: 0, minAge: 0, maxAge: 0, players: [], 
-        coaches: []}
-    );
+    let initialState =   
+    {sportId: 0, teamName: "", description: "", 
+    pricePerYear: "", minAge: "", maxAge: "", players: [], 
+    coaches: []}
+    const [sportTeam, setSportTeam] = useState(initialState);
 
     useEffect(() => {
         sportFacade.getAllSportTeams()
@@ -30,10 +30,10 @@ export default function SportTeams({roles}) {
         e.preventDefault();
         let team = {...sportTeam};
         delete team.sportId;
-        team["sport"] = {id: 0};
-        team.sport.id = sportTeam.sportId;
+        team["sport"] = {id: parseInt(sportTeam.sportId)};
         team.pricePerYear = parseFloat(team.pricePerYear);
-            
+        
+        if (!isEdit) {
         sportFacade.addSportTeam(team)
         .then(addedSportTeam => {
             setMsg(addedSportTeam.teamName + " has been added to the database.")
@@ -46,12 +46,35 @@ export default function SportTeams({roles}) {
                 setError("No response from API.")
             }
         })
+    } else {
+        if (typeof sportTeam.sportId === "undefined") {
+            team.sport.id = sportTeam.sport.id;
+        } else {
+            team.sport.id = parseInt(sportTeam.sportId);
+        }
+        sportFacade.editSportTeam(team, parseInt(team.id))
+        .then(editedTeam => {
+            setMsg(editedTeam.teamName + " has been edited.")
+            setError("");
+        })
+        .catch((promise) => {
+            if (promise.fullError) {
+                printError(promise, setError);
+            } else {
+                setError("No response from API.")
+            }
+        })
+    }
     }
 
-    const toggleModal = () => {
+    const toggleModal = (e) => {
         setError("");
         setMsg("")
         setIsOpen(!isOpen);
+        if (typeof e !== "undefined" && e.target.id === "add") {
+            setIsEdit(false);
+            setSportTeam({...initialState});
+        }
     }
 
     const deleteTeam = (e) => {
@@ -70,6 +93,14 @@ export default function SportTeams({roles}) {
         }, 8000);
     }
 
+    const editTeam = (e) => {
+        setIsEdit(true);
+        toggleModal();
+
+        sportFacade.getSportTeamById(parseInt(e.target.id))
+        .then(team => setSportTeam({...team}))
+    }
+
     return (
         <div>
             <br />
@@ -77,7 +108,7 @@ export default function SportTeams({roles}) {
             <br />
             {roles.includes("admin") && (
                 <div>
-                <button className="btn btn-danger" onClick={toggleModal}>
+                <button className="btn btn-danger" id="add" onClick={toggleModal}>
                     Add sport team
                 </button>
                 <br /><br />
@@ -119,7 +150,10 @@ export default function SportTeams({roles}) {
                         id={sportTeam.id}>Delete</button>) : ""}
                         </td>
                         <td>{roles.includes("admin") ?
-                         (<button className="btn btn-danger">Edit</button>) : ""}
+                         (<button 
+                         className="btn btn-danger"
+                         onClick={editTeam}
+                         id={sportTeam.id}>Edit</button>) : ""}
                         </td>
                     </tr>
                 )
@@ -130,23 +164,25 @@ export default function SportTeams({roles}) {
 
         <Modal show={isOpen} onHide={toggleModal}>
         <Modal.Header closeButton>
-          <Modal.Title>Add a sport team</Modal.Title>
+          <Modal.Title>{isEdit ? "Edit a sport team" : "Add a sport"}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
             <div style={{textAlign: "center"}}>
             <form onSubmit={handleSubmit}>
 
-            <label>Select a sport</label><br />
+            <label>{isEdit ? 
+            `Select a sport (current: )` 
+            : "Select a sport"}
+            </label><br />
             <select 
             onChange={handleChange}
-            id="sportId" 
+            id="sportId"
             className="form-control" 
             style={{width: "210px", marginLeft: "130px"}}> 
                 {allSports.map(sport => {
                     return (
                         <option 
                         key={sport.id}
-                        name="sportId" 
                         value={sport.id}
                         >
                             {sport.name}
@@ -159,30 +195,35 @@ export default function SportTeams({roles}) {
             <label>Team name</label><br />
             <input
                 id="teamName"
+                value={sportTeam.teamName}
                 onChange={handleChange}
             />
             <br />
             <label>Description</label><br />
             <input
                 id="description"
+                value={sportTeam.description}
                 onChange={handleChange}
             />
             <br />
             <label>Price per year</label><br />
             <input
                 id="pricePerYear"
+                value={sportTeam.pricePerYear}
                 onChange={handleChange}
             />
             <br />
             <label>Minimum age</label><br />
             <input
                 id="minAge"
+                value={sportTeam.minAge}
                 onChange={handleChange}
             />
             <br />
             <label>Maximum age</label><br />
             <input
                 id="maxAge"
+                value={sportTeam.maxAge}
                 onChange={handleChange}
             />
             <br />
@@ -190,7 +231,7 @@ export default function SportTeams({roles}) {
                 
             <input
             type="submit"
-            value="Add"
+            value={isEdit ? "Edit" : "Add"}
             className="btn btn-danger">
             </input>
             </form>

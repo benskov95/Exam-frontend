@@ -9,10 +9,8 @@ import {
 } from "react-router-dom";
 import { Login } from "./Login";
 import Home from "./Home";
-import Admin from "./Admin";
 import Register from "./Register";
 import NoMatch from "./NoMatch"
-import PrivateRoute from "./PrivateRoute"
 import Sports from "../components/Sports";
 import SportTeams from "../components/SportTeams";
 
@@ -41,15 +39,6 @@ export default function Header({ isLoggedIn, setLoginStatus, loginMsg }) {
               </NavLink>
             </li>
           </React.Fragment>
-        {roles.includes("admin") && (
-          <React.Fragment>
-            <li>
-              <NavLink activeClassName="active" to="/admin">
-                Admin
-              </NavLink>
-            </li>
-          </React.Fragment>
-        )}
         <li>
           <NavLink activeClassName="selected" to="/login">
             {loginMsg}
@@ -84,8 +73,6 @@ export default function Header({ isLoggedIn, setLoginStatus, loginMsg }) {
         <Route path="/teams">
           <SportTeams roles={roles}/>
         </Route>
-
-        <PrivateRoute path="/admin" isLoggedIn={isLoggedIn} component={Admin} />
 
         <Route exact path="/">
           <Home />

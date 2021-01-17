@@ -65,7 +65,7 @@ export const Login = ({ isLoggedIn, loginMsg, setLoginStatus }) => {
       <div>
         <h2>{loginMsg}</h2>
         <br />
-        <button onClick={logout} className="btn btn-secondary">Log out</button>
+        <button onClick={logout} className="btn btn-danger">Log out</button>
       </div>
     );
   }

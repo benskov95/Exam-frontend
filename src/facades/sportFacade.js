@@ -21,6 +21,12 @@ const sportFacade = () => {
         .then(handleHttpErrors);
     }
 
+    const getSportTeamById = (id) => {
+        return fetch(URL + `/api/sport/team/${id}`,
+        apiFacade.makeOptions("GET", true))
+        .then(handleHttpErrors);
+    }
+
     const addSportTeam = (sportTeam) => {
         return fetch(URL + "/api/sport/team", 
         apiFacade.makeOptions("POST", true, sportTeam))
@@ -67,6 +73,7 @@ const sportFacade = () => {
         getAllSports,
         addSport,
         getAllSportTeams,
+        getSportTeamById,
         addSportTeam,
         editSportTeam,
         deleteSportTeam,
