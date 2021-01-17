@@ -11,18 +11,20 @@ export default function Sports({roles}) {
 
     useEffect(() => {
         sportFacade.getAllSports()
-        .then(sports => setAllSports([...sports]))
+        .then(sports => setAllSports([...sports]));
     }, [msg])
 
     const handleChange = (e) => {
-        setError("");
         setSport({ ...sport, [e.target.id]: e.target.value });
     }
 
     const handleSubmit = (e) => {
         e.preventDefault();
         sportFacade.addSport(sport)
-        .then(addedSport => setMsg("Great success"))
+        .then(addedSport => {
+            setMsg(addedSport.name + " has been added to the database.")
+            setError("");
+        })
         .catch((promise) => {
             if (promise.fullError) {
                 printError(promise, setError);
@@ -33,6 +35,8 @@ export default function Sports({roles}) {
     }
 
     const toggleModal = () => {
+        setError("");
+        setMsg("")
         setIsOpen(!isOpen);
     }
 
@@ -107,6 +111,7 @@ export default function Sports({roles}) {
             </form>
 
             <p style={{color : "green"}}>{msg}</p>
+            <p style={{color: "red"}}>{error}</p>
             </div>
         </Modal.Body>
         </Modal>
