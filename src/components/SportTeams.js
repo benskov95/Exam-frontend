@@ -54,6 +54,22 @@ export default function SportTeams({roles}) {
         setIsOpen(!isOpen);
     }
 
+    const deleteTeam = (e) => {
+        e.preventDefault();
+        sportFacade.deleteSportTeam(parseInt(e.target.id))
+        .then(deletedTeam => setMsg(`${deletedTeam.teamName} has been deleted.`))
+        .catch((promise) => {
+            if (promise.fullError) {
+                printError(promise, setError);
+            } else {
+                setError("No response from API.")
+            }
+        })
+        setTimeout(() => {
+            setMsg("");
+        }, 8000);
+    }
+
     return (
         <div>
             <br />
@@ -67,6 +83,7 @@ export default function SportTeams({roles}) {
                 <br /><br />
                 </div>
             )}
+            <p style={{color: "green"}}>{msg}</p>
             <div className="container" style={{backgroundColor: "white"}}>
             <table className="table table-bordered">
                 <thead className="thead thead-dark">
@@ -79,6 +96,8 @@ export default function SportTeams({roles}) {
                     <th>Maximum age</th>
                     <th>Number of players</th>
                     <th>Number of coaches</th>
+                    <th></th>
+                    <th></th>
                     </tr>
                 </thead>
             <tbody>
@@ -93,6 +112,15 @@ export default function SportTeams({roles}) {
                         <td>{sportTeam.maxAge}</td>
                         <td>{sportTeam.players.length}</td>
                         <td>{sportTeam.coaches.length}</td>
+                        <td>{roles.includes("admin") ? 
+                        (<button 
+                        className="btn btn-danger" 
+                        onClick={deleteTeam} 
+                        id={sportTeam.id}>Delete</button>) : ""}
+                        </td>
+                        <td>{roles.includes("admin") ?
+                         (<button className="btn btn-danger">Edit</button>) : ""}
+                        </td>
                     </tr>
                 )
             })}

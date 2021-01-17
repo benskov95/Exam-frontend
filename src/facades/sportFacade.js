@@ -34,31 +34,31 @@ const sportFacade = () => {
     }
 
     const deleteSportTeam = (id) => {
-        return fetch(URL + `api/sport/team/${id}`,
+        return fetch(URL + `/api/sport/team/${id}`,
         apiFacade.makeOptions("DELETE", true))
         .then(handleHttpErrors);
     }
 
     const addPlayer = (player, username) => {
-        return fetch(URL + `api/sport/player/${username}`, 
+        return fetch(URL + `/api/sport/player/${username}`, 
         apiFacade.makeOptions("POST", true, player))
         .then(handleHttpErrors);
     }
 
     const addPlayerToTeam = (player, teamId) => {
-        return fetch(URL + `api/sport/team/${teamId}/player`, 
+        return fetch(URL + `/api/sport/team/${teamId}/player`, 
         apiFacade.makeOptions("POST", true, player))
         .then(handleHttpErrors)
     }
 
     const addCoach = (coach, username) => {
-        return fetch(URL + `api/sport/coach/${username}`, 
+        return fetch(URL + `/api/sport/coach/${username}`, 
         apiFacade.makeOptions("POST", true, coach))
         .then(handleHttpErrors);
     }
 
     const addCoachToTeam = (coach, teamId) => {
-        return fetch(URL + `api/sport/team/${teamId}/coach`,
+        return fetch(URL + `/api/sport/team/${teamId}/coach`,
         apiFacade.makeOptions("POST", true, coach))
         .then(handleHttpErrors);
     }
