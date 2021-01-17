@@ -48,7 +48,7 @@ export default function Register() {
                 name="password">
                 </input>
                 <br /><br />
-                <input type="submit" value="Register" className="btn btn-secondary"></input>
+                <input type="submit" value="Register" className="btn btn-danger"></input>
                 <br /><br />
                 <p style={{ color: "red" }}>{error}</p>
                 <p style={{color: "green"}}>{msg}</p>
