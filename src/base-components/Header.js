@@ -16,6 +16,7 @@ import PrivateRoute from "./PrivateRoute"
 import Sports from "../components/Sports";
 import SportTeams from "../components/SportTeams";
 import ChooseRole from "../components/ChooseRole";
+import MyTeams from "../components/MyTeams";
 
 export default function Header({ isLoggedIn, setLoginStatus, loginMsg }) {
 
@@ -51,6 +52,15 @@ export default function Header({ isLoggedIn, setLoginStatus, loginMsg }) {
             </li>
           </React.Fragment>
           )}
+          {isLoggedIn && (
+            <React.Fragment>
+            <li>
+              <NavLink activeClassName="active" to="/my-teams">
+                My Teams
+              </NavLink>
+            </li>
+          </React.Fragment>
+          )}
         <li>
           <NavLink activeClassName="selected" to="/login">
             {loginMsg}
@@ -79,15 +89,19 @@ export default function Header({ isLoggedIn, setLoginStatus, loginMsg }) {
         </Route>
 
         <Route path="/sports">
-          <Sports roles={roles}/>
+          <Sports roles={roles} />
         </Route>
 
         <Route path="/teams">
-          <SportTeams roles={roles}/>
+          <SportTeams roles={roles} />
         </Route>
 
         <Route path="/choose">
-          <ChooseRole roles={roles}/>
+          <ChooseRole roles={roles} />
+        </Route>
+
+        <Route path="/my-teams">
+          <MyTeams roles={roles} />
         </Route>
 
         <PrivateRoute path="/admin" isLoggedIn={isLoggedIn} component={Admin} />
