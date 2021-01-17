@@ -1,1 +1,1 @@
-export const API_URL = "https://bencat.dk/exam-backend";
+export const API_URL = "http://localhost:8080/exam-backend";

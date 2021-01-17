@@ -1,5 +1,5 @@
 import { URL } from "../base-components/Home";
-import apiFacade, { handleHttpErrors } from "./apiFacade";
+import apiFacade, { handleHttpErrors } from "../base-facades/apiFacade";
 
 const sportFacade = () => {
 

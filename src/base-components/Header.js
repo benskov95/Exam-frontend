@@ -14,6 +14,7 @@ import Admin from "./Admin";
 import Register from "./Register";
 import NoMatch from "./NoMatch"
 import PrivateRoute from "./PrivateRoute"
+import Sports from "../components/Sports";
 
 export default function Header({ isLoggedIn, setLoginStatus, loginMsg }) {
 
@@ -28,11 +29,16 @@ export default function Header({ isLoggedIn, setLoginStatus, loginMsg }) {
             Home
           </NavLink>
         </li>
+        <li>
+          <NavLink activeClassName="selected" to="/sports">
+            Sports
+          </NavLink>
+        </li>
         {isLoggedIn && (
           <React.Fragment>
             <li>
-              <NavLink activeClassName="active" to="/example">
-                Example
+              <NavLink activeClassName="active" to="/teams">
+                Teams
               </NavLink>
             </li>
           </React.Fragment>
@@ -72,11 +78,18 @@ export default function Header({ isLoggedIn, setLoginStatus, loginMsg }) {
         <Route path="/frontend-exam">
           <Redirect to="/" />
         </Route>
-        <Route exact path="/">
-          <Home />
-          </Route>
+
+        <Route path="/sports">
+          <Sports />
+        </Route>
+
         <PrivateRoute path="/example" isLoggedIn={isLoggedIn} component={Example} />
         <PrivateRoute path="/admin" isLoggedIn={isLoggedIn} component={Admin} />
+
+        <Route exact path="/">
+          <Home />
+        </Route>
+
         <Route path="/login">
           <Login
             setLoginStatus={setLoginStatus}
@@ -84,12 +97,15 @@ export default function Header({ isLoggedIn, setLoginStatus, loginMsg }) {
             loginMsg={loginMsg}
           />
         </Route>
+
         <Route path="/register">
           <Register />
         </Route>
+
         <Route>
-         <NoMatch />
+           <NoMatch />
         </Route>
+
       </Switch>
     </div>
   );
