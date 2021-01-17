@@ -54,7 +54,13 @@ const sportFacade = () => {
     const addPlayerToTeam = (player, teamId) => {
         return fetch(URL + `/api/sport/team/${teamId}/player`, 
         apiFacade.makeOptions("POST", true, player))
-        .then(handleHttpErrors)
+        .then(handleHttpErrors);
+    }
+
+    const getPlayerByUsername = (username) => {
+        return fetch(URL + `/api/sport/player/${username}`, 
+        apiFacade.makeOptions("GET", true))
+        .then(handleHttpErrors);
     }
 
     const addCoach = (coach, username) => {
@@ -69,6 +75,12 @@ const sportFacade = () => {
         .then(handleHttpErrors);
     }
 
+    const getCoachByUsername = (username) => {
+        return fetch(URL + `/api/sport/coach/${username}`,
+        apiFacade.makeOptions("GET", true))
+        .then(handleHttpErrors);
+    }
+
     return {
         getAllSports,
         addSport,
@@ -79,8 +91,10 @@ const sportFacade = () => {
         deleteSportTeam,
         addPlayer,
         addPlayerToTeam,
+        getPlayerByUsername,
         addCoach,
-        addCoachToTeam
+        addCoachToTeam,
+        getCoachByUsername
     }
 }
   

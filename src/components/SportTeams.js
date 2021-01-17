@@ -3,6 +3,8 @@ import sportFacade from "../facades/sportFacade";
 import { Modal } from "react-bootstrap";
 
 export default function SportTeams({roles}) {
+    const [player, setPlayer] = useState({});
+    const [coach, setCoach] = useState({});
     const [allSportTeams, setAllSportTeams] = useState([]);
     const [allSports, setAllSports] = useState([]);
     const [isOpen, setIsOpen] = useState(false);
@@ -18,8 +20,17 @@ export default function SportTeams({roles}) {
     useEffect(() => {
         sportFacade.getAllSportTeams()
         .then(sportTeams => setAllSportTeams([...sportTeams]));
+
         sportFacade.getAllSports()
         .then(sports => setAllSports([...sports]));
+
+        if (roles.includes("player")) {
+        sportFacade.getPlayerByUsername(localStorage.getItem("user"))
+        .then(playerFromDb => setPlayer({...playerFromDb}));
+        } else if (roles.includes("coach")) {
+            sportFacade.getCoachByUsername(localStorage.getItem("user"))
+            .then(coachFromDb => setCoach({...coachFromDb}));
+        }
     }, [msg])
 
     const handleChange = (e) => {
@@ -101,6 +112,32 @@ export default function SportTeams({roles}) {
         .then(team => setSportTeam({...team}))
     }
 
+    const signUpAsPlayer = (e) => {
+        sportFacade.addPlayerToTeam(player, parseInt(e.target.id))
+        .then(playerFromDb => setMsg(`Congratulations, ${playerFromDb.name}! You've joined ${e.target.name}!`))
+        .catch((promise) => {
+            if (promise.fullError) {
+                printError(promise, setError);
+                setMsg("");
+            } else {
+                setError("No response from API.")
+            }
+        })
+    }
+
+    const signUpAsCoach = (e) => {
+        sportFacade.addCoachToTeam(coach, parseInt(e.target.id))
+        .then(coachFromDb => setMsg(`Congratulations, ${coachFromDb.name}! You've joined ${e.target.name}!`))
+        .catch((promise) => {
+            if (promise.fullError) {
+                printError(promise, setError);
+                setMsg("");
+            } else {
+                setError("No response from API.")
+            }
+        })
+    }
+
     return (
         <div>
             <br />
@@ -115,6 +152,7 @@ export default function SportTeams({roles}) {
                 </div>
             )}
             <p style={{color: "green"}}>{msg}</p>
+            <p style={{color: "red"}}>{error}</p>
             <div className="container" style={{backgroundColor: "white"}}>
             <table className="table table-bordered">
                 <thead className="thead thead-dark">
@@ -143,18 +181,37 @@ export default function SportTeams({roles}) {
                         <td>{sportTeam.maxAge}</td>
                         <td>{sportTeam.players.length}</td>
                         <td>{sportTeam.coaches.length}</td>
+
                         <td>{roles.includes("admin") ? 
                         (<button 
                         className="btn btn-danger" 
                         onClick={deleteTeam} 
-                        id={sportTeam.id}>Delete</button>) : ""}
+                        id={sportTeam.id}>Delete</button>) 
+
+                        : roles.includes("player") ? 
+                        <button
+                        className="btn btn-danger"
+                        onClick={signUpAsPlayer}
+                        id={sportTeam.id}
+                        name={sportTeam.teamName}>Join as player</button> 
+                        : ""}
                         </td>
+
                         <td>{roles.includes("admin") ?
                          (<button 
                          className="btn btn-danger"
                          onClick={editTeam}
-                         id={sportTeam.id}>Edit</button>) : ""}
+                         id={sportTeam.id}>Edit</button>) 
+
+                         : roles.includes("coach") ? 
+                         <button
+                         className="btn btn-danger"
+                         onClick={signUpAsCoach}
+                         id={sportTeam.id}
+                         name={sportTeam.teamName}>Join as coach</button> 
+                         : ""}
                         </td>
+
                     </tr>
                 )
             })}

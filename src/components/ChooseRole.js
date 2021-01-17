@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import sportFacade from "../facades/sportFacade";
 import { Modal } from "react-bootstrap";
 
@@ -20,7 +20,6 @@ export default function ChooseRole({roles}) {
     }
     
     const handleSubmit = (e) => {
-        console.log(username)
         e.preventDefault();
 
         if (isPlayer) {
@@ -116,7 +115,7 @@ export default function ChooseRole({roles}) {
                 <div>
                 <label>Age</label><br />
                 <input
-                    id="Age"
+                    id="age"
                     onChange={handleChange}
                 />
                 <br />
