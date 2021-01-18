@@ -4,7 +4,7 @@ import sportFacade from "../facades/sportFacade";
 export default function MyTeams({roles}) {
     const [player, setPlayer] = useState({});
     const [coach, setCoach] = useState({});
-    console.log(coach)
+    console.log(player);
 
     useEffect(() => {
         if(roles.includes("player")) {

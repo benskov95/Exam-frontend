@@ -27,7 +27,6 @@ export default function ChooseRole({roles}) {
             .then(addedPlayer => {
                 setMsg(`Congratulations, ${addedPlayer.name}. You're now registered as a player and can join teams! Please log out and back in again to update your account.`)
                 setError("");
-                setIsPlayer(false);
             })
             .catch((promise) => {
                 if (promise.fullError) {
